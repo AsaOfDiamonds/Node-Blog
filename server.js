@@ -1,20 +1,15 @@
 const express = require('express');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const cors = require('cors');
+const configureMiddleware = require('./config/middleware');
+const configureRoutes = require('./routes/routes');
 const dbUser = require('./data/helpers/userDb');
 const dbPosts = require('./data/helpers/postDb');
-
 
 
 
 const server = express();
 
 //middleware
-server.use(morgan('short')); //3rd party logging  yarn add morgan
-server.use(helmet()); //3rd party security yarn add helmet
-server.use(express.json()); //built-in
-server.use(cors()); //3rd party yarn add cors
+configureMiddleware(server);
 //custom middleware
 function nameUppercase(req, res, next) {
     req.body.name = 
@@ -33,6 +28,7 @@ const checkName = (req, res, next) => {
 }
 
 //User routes
+configureRoutes(server);
 
 const getAllUsers = (req, res) => {
     dbUser.get()
